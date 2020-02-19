@@ -36,10 +36,14 @@ class Chicken extends GameObject {
 	}
 
 	function anim_callback(n:String, f:Int, i:Int) {
-		if (Math.random() > 0.5) if (f == 2 || f == 6) walk_particles.fire({
+		if (f % 2 == 0) if (opposing_acceleration()) walk_particles.fire({
 			position: getMidpoint().place_on_circumference(360.get_random(), 4.get_random()),
 			acceleration: FlxPoint.get(0, -20)
 		});
+	}
+
+	function opposing_acceleration() {
+		return acceleration.x.sign_of() != velocity.x.sign_of() || velocity.x.sign_of() != acceleration.x.sign_of();
 	}
 
 	override function check_wait():Bool return false;
@@ -71,7 +75,7 @@ class Chicken extends GameObject {
 		else animation.play('walk_$v_d');
 		if (velocity.x != 0) facing = acceleration.x < 0 ? FlxObject.LEFT : FlxObject.RIGHT;
 		if (velocity.y != 0) v_d = velocity.y < 0 ? 'up' : 'down';
-		animation.curAnim.frameRate = (velocity.vector_length() * 0.25).to_int();
+		animation.curAnim.frameRate = (velocity.vector_length() * 0.125).to_int();
 	}
 
 }
